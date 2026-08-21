@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "last_checked": "2026-08-22",
+  "note": "Constraints are transcribed from the vendor API reference. Every rule carries a source key so a failing lint can be traced back to a primary document rather than to a blog post.",
+  "sources": {
+    "api_reference": "https://platform.minimax.io",
+    "model_card": "https://huggingface.co/MiniMaxAI/MiniMax-H3",
+    "spec_table": "https://minimax-h3ai.video/#specs",
+    "reference_mode": "https://minimax-h3ai.video/reference-to-video"
+  },
+  "models": {
+    "minimax-h3": {
+      "display_name": "MiniMax H3",
+      "also_shipped_as": "Hailuo 3",
+      "duration_seconds": {
+        "min": 4,
+        "max": 15,
+        "step": 1,
+        "source": "api_reference",
+        "common_error": "Many secondary write-ups state a 5-second minimum. The API reference accepts 4."
+      },
+      "fps": 24,
+      "resolutions": {
+        "allowed": ["768P", "2K"],
+        "source": "api_reference",
+        "common_error": "1080p and 4K are frequently claimed and are not offered. 2K here means a 1440px short edge."
+      },
+      "aspect_ratios": {
+        "allowed": ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"],
+        "derived_when": ["first_frame_image", "last_frame_image"],
+        "source": "api_reference",
+        "common_error": "aspect_ratio is a derived value once an image is attached; sending one anyway is silently ignored."
+      },
+      "audio": {
+        "generated_in_same_pass": true,
+        "sample_rate_hz": 32000,
+        "channels": 2,
+        "dialogue_languages": 11,
+        "can_be_disabled": false,
+        "billed_separately": false,
+        "source": "model_card"
+      },
+      "reference_inputs": {
+        "max_images": 9,
+        "max_videos": 3,
+        "max_audio": 3,
+        "max_files_total": 12,
+        "source": "reference_mode",
+        "common_error": "9 + 3 + 3 is 15, but the total cap is 12. Requests that satisfy every per-type limit can still exceed the total."
+      },
+      "source_video": {
+        "max_clips": 3,
+        "clip_seconds_min": 2,
+        "clip_seconds_max": 15,
+        "source": "api_reference"
+      },
+      "high_resolution_path": {
+        "kind": "regeneration",
+        "description": "The 768P result is fed back through the model with the original context and generated again, rather than upscaled. Frame n of the 2K render is not the same instant as frame n of the 768P render.",
+        "source": "spec_table"
+      }
+    }
+  }
+}

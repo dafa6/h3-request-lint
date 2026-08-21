@@ -1,0 +1,53 @@
+{
+  "note": "Each example is a request that looks reasonable and fails for a reason the API will not explain clearly. Run: node lint.mjs examples/<name>.json",
+  "examples": [
+    {
+      "name": "three-second-clip",
+      "why_it_looks_fine": "Three seconds is a normal length for a social cut.",
+      "request": { "prompt": "a cat knocks a glass off a table", "duration": 3, "resolution": "768P" }
+    },
+    {
+      "name": "half-second-precision",
+      "why_it_looks_fine": "Editors think in fractional seconds, so 7.5 feels legal.",
+      "request": { "prompt": "slow push in on a rain-streaked window", "duration": 7.5, "resolution": "768P" }
+    },
+    {
+      "name": "asked-for-1080p",
+      "why_it_looks_fine": "1080p is the default assumption for anything called HD.",
+      "request": { "prompt": "drone shot over a harbour at dawn", "duration": 8, "resolution": "1080p" }
+    },
+    {
+      "name": "ratio-with-an-image",
+      "why_it_looks_fine": "The ratio field is still in the schema, so it looks like a choice.",
+      "request": { "prompt": "the subject turns to camera", "duration": 6, "aspect_ratio": "16:9", "first_frame_image": "portrait.png" }
+    },
+    {
+      "name": "every-per-type-limit-respected",
+      "why_it_looks_fine": "9 images, 3 clips and 3 audio files each sit exactly on their documented cap.",
+      "request": {
+        "prompt": "keep the same face and voice across the shot",
+        "duration": 10,
+        "reference_inputs": {
+          "images": ["a.png","b.png","c.png","d.png","e.png","f.png","g.png","h.png","i.png"],
+          "videos": ["x.mp4","y.mp4","z.mp4"],
+          "audio": ["v1.wav","v2.wav","v3.wav"]
+        }
+      }
+    },
+    {
+      "name": "please-no-audio",
+      "why_it_looks_fine": "Most video models treat audio as an opt-in extra.",
+      "request": { "prompt": "empty corridor, no dialogue", "duration": 5, "generate_audio": false }
+    },
+    {
+      "name": "frame-index-across-resolutions",
+      "why_it_looks_fine": "Pick the cut point on the cheap preview, apply it to the final render.",
+      "request": { "prompt": "hand places a cup on a table", "duration": 6, "resolution": "2K", "frame_index": 84 }
+    },
+    {
+      "name": "valid",
+      "why_it_looks_fine": "This one actually is fine.",
+      "request": { "prompt": "a courier bikes through a night market, neon reflections, ambient crowd noise", "duration": 8, "resolution": "2K", "aspect_ratio": "9:16" }
+    }
+  ]
+}
